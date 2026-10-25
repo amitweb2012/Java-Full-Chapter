@@ -1,0 +1,11 @@
+# IntelliJ IDEA
+.idea/
+
+# Java build output
+*.class
+/out/
+/build/
+/target/
+
+# macOS
+.DS_Store
