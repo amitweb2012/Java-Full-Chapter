@@ -1,27 +1,27 @@
 public class Demo {
     public static void main(String[] args) {
         
-        College college = new College("IIT G", "Assam");
+        MutableCollege college = new MutableCollege("IIT G", "Assam");
 
-        Student s1 = new Student(28, "Aditya", college);
+        StudentWithMutableCollege s1 = new StudentWithMutableCollege(28, "Aditya", college);
 
-        System.out.println(s1.getCollege().name); // IIT G
+        System.out.println(s1.getMutableCollege().name); // IIT G
 
-        s1.getCollege().name = "IIT B";
+        s1.getMutableCollege().name = "IIT B";
 
-        System.out.println(s1.getCollege().name); // IIT B
+        System.out.println(s1.getMutableCollege().name); // IIT B
         
 
     }
 }
 
 // (NOt purely immutable)
-final class Student {
+final class StudentWithMutableCollege {
     private final int age;
     private final String name;
-    private final College college;
+    private final MutableCollege college;
 
-    Student(int age, String name, College college) {
+    StudentWithMutableCollege(int age, String name, MutableCollege college) {
         this.age = age;
         this.name = name;
         this.college = college;
@@ -36,17 +36,17 @@ final class Student {
         return this.name;
     }
 
-    public College getCollege() {
+    public MutableCollege getMutableCollege() {
         return this.college;
     }
 }
 
 // Mutable
-class College {
+class MutableCollege {
     String name;
     String address;
 
-    College(String name, String address) {
+    MutableCollege(String name, String address) {
         this.name = name;
         this.address = address;
     }
