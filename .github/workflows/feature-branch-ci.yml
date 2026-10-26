@@ -1,0 +1,62 @@
+name: Feature Branch CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: feature-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate feature branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        if: ${{ hashFiles('**/pom.xml') != '' || hashFiles('**/gradlew') != '' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Run Maven verification
+        if: ${{ hashFiles('**/pom.xml') != '' }}
+        run: |
+          set -e
+          find . -name pom.xml -not -path '*/target/*' -print0 |
+          while IFS= read -r -d '' pom; do
+            echo "Verifying ${pom}"
+            mvn -B -f "${pom}" verify
+          done
+
+      - name: Run Gradle verification
+        if: ${{ hashFiles('**/gradlew') != '' }}
+        run: |
+          set -e
+          find . -name gradlew -not -path '*/build/*' -print0 |
+          while IFS= read -r -d '' wrapper; do
+            dir="$(dirname "${wrapper}")"
+            echo "Verifying Gradle project in ${dir}"
+            chmod +x "${wrapper}"
+            "${wrapper}" -p "${dir}" build
+          done
+
+      - name: Check patch whitespace
+        run: git diff --check "${{ github.event.pull_request.base.sha || github.event.before }}" "${{ github.sha }}" || git diff --check
+
+      - name: Report when no Java build is configured
+        if: ${{ hashFiles('**/pom.xml') == '' && hashFiles('**/gradlew') == '' }}
+        run: echo "No Maven pom.xml or Gradle wrapper found. Java build tests were skipped; add a build file to enable them."
