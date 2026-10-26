@@ -1,3 +1,5 @@
+package lecture24.demo;
+
 public class Demo {
     public static void main(String[] args) {
         Payment p = new DebitCard();

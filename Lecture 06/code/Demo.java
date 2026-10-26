@@ -1,3 +1,5 @@
+package lecture06.demo;
+
 public class Demo {
     public static void main(String[] args) {
         //Operators in Java

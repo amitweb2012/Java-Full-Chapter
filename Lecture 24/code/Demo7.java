@@ -1,3 +1,5 @@
+package lecture24.demo7;
+
 public class Demo7 {
     public static void main(String[] args) {
         C c = new C();

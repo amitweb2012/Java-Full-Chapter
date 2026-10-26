@@ -1,3 +1,5 @@
+package lecture27.demo3;
+
 public class Demo3 {
     public static void main(String[] args) {
         Box<Integer> b1 = new Box<>(10); // Type argument

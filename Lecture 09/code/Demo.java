@@ -1,3 +1,5 @@
+package lecture09.demo;
+
 public class Demo {
     public static void main(String[] args) {
         //int[] rollNums = new int[3];

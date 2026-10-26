@@ -1,3 +1,5 @@
+package lecture19.demo2;
+
 // Inner class
 
 public class Demo2 {

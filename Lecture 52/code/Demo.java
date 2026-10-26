@@ -1,3 +1,5 @@
+package lecture52.demo;
+
 public class Demo {
     public static void main(String[] args) {
         Box box = new Box();

@@ -1,3 +1,5 @@
+package lecture16.demo2;
+
 // Demonstrates fully-qualified names for classes in different packages.
 public class Demo2 {
     public static void main(String[] args) {

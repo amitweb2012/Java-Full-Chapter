@@ -1,3 +1,5 @@
+package lecture08.demo;
+
 public class Demo {
     public static void main(String[] args) {
         // Jump statements and labelled loops.

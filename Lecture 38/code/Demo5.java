@@ -1,3 +1,5 @@
+package lecture38.demo5;
+
 import java.util.function.Predicate;
 
 public class Demo5 {

@@ -1,3 +1,5 @@
+package lecture38.demo3;
+
 import java.util.function.*;
 
 public class Demo3 {

@@ -1,3 +1,5 @@
+package lecture11.demo4;
+
 public class Demo4 {
 
     static String name = "Aditya"; // global scope

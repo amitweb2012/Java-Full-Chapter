@@ -1,3 +1,5 @@
+package lecture05.demo2;
+
 public class Demo2 {
     public static void main(String[] args) {
         byte b = 42;

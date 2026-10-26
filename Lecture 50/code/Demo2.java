@@ -1,3 +1,5 @@
+package lecture50.demo2;
+
 public class Demo2 {
     
     static volatile boolean flag = false; // true

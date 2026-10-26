@@ -1,3 +1,5 @@
+package lecture27.demo6;
+
 public class Demo6 {
     public static void main(String[] args) {
         Box<Integer> b1 = new Box<>();

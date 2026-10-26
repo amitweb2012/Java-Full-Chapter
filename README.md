@@ -67,6 +67,13 @@ cd Java-Full-Chapter
 
 Open the folder in your preferred IDE. As code examples are added, each topic will include its own run instructions where needed.
 
+The standalone Java examples use a package unique to their lecture and file (for example, `lecture19.demo2`). This keeps repeated names such as `Demo`, `Outer`, and `Student` from colliding when examples are compiled together. To compile and run the Lecture 19 `Demo2` example:
+
+```bash
+javac -d out "Lecture 19/code/Demo2.java"
+java -cp out lecture19.demo2.Demo2
+```
+
 ## 🧭 Recommended Study Workflow
 
 1. **Understand** the concept and the problem it solves.

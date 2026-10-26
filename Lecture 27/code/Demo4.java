@@ -1,3 +1,5 @@
+package lecture27.demo4;
+
 public class Demo4 {
     public static void main(String[] args) {
         Pair<Integer, String> p1 = new Pair<>(23, "Aditya");

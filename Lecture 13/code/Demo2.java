@@ -1,3 +1,5 @@
+package lecture13.demo2;
+
 public class Demo2 {
     public static void main(String[] args) {
         Student s1 = new Student("Rohit", 28, 102, "IIT G");

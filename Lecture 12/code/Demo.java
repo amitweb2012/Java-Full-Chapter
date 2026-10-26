@@ -1,3 +1,5 @@
+package lecture12.demo;
+
 public class Demo {
     public static void main(String[] args) {
         Student s1 = new Student();
