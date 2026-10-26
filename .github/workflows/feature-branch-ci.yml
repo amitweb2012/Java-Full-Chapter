@@ -34,7 +34,7 @@ jobs:
       - name: Verify Maven project metadata
         run: mvn -B -f pom.xml verify
 
-      - name: Compile each chapter's Java examples
+      - name: Compile Java examples independently
         shell: bash
         run: |
           set -euo pipefail
@@ -42,26 +42,21 @@ jobs:
           output_root="$RUNNER_TEMP/java-chapter-classes"
           mkdir -p "$output_root"
 
-          while IFS= read -r -d '' code_dir; do
-            mapfile -d '' sources < <(find "$code_dir" -maxdepth 1 -type f -name '*.java' -print0)
-            if (("${#sources[@]}" == 0)); then
-              continue
-            fi
-
+          while IFS= read -r -d '' source; do
             compiled=$((compiled + 1))
-            output_dir="$output_root/chapter-$compiled"
+            output_dir="$output_root/example-$compiled"
             mkdir -p "$output_dir"
-            echo "::group::Compile Java examples in $code_dir"
-            javac --release 21 -d "$output_dir" "${sources[@]}"
+            echo "::group::Compile $source"
+            javac --release 21 -d "$output_dir" "$source"
             echo "::endgroup::"
-          done < <(find . -type d -name code -not -path '*/.git/*' -print0)
+          done < <(find . -type f -name '*.java' -not -path '*/.git/*' -not -path '*/target/*' -print0)
 
           if ((compiled == 0)); then
-            echo "No Java source files were found in chapter code directories." >&2
+            echo "No Java source files were found." >&2
             exit 1
           fi
 
-          echo "Successfully compiled Java sources in $compiled chapter code directories."
+          echo "Successfully compiled $compiled Java source files."
 
       - name: Check patch whitespace
         shell: bash
