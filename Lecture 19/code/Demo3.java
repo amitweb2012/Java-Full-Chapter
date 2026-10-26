@@ -12,11 +12,11 @@ public class Demo3 {
 class Outer {
     void greet() {
         int y = 5;
-        y++;
+        final int valueToCapture = ++y;
 
         class Local {
             void sayHello() {
-                System.out.println(y);
+                System.out.println(valueToCapture);
             }
         }
 
