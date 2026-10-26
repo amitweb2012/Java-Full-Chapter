@@ -1,0 +1,7 @@
+{
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "java.autobuild.enabled": false,
+  "java.errors.incompleteClasspath.severity": "warning",
+  "files.exclude": { "**/.DS_Store": true, "**/target": true, "**/out": true },
+  "search.exclude": { "**/target": true, "**/out": true }
+}
