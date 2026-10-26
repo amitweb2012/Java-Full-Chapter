@@ -48,7 +48,7 @@ jobs:
             relative="${source#./}"
             safe_name="$(printf '%s' "$relative" | tr '/ ' '__')"
             work_dir="$output_root/$total"
-            mkdir -p "$work_dir"
+            mkdir -p "$work_dir/classes"
 
             # Examples are independent snippets and can reuse class names
             # across files. Compile each source in isolation to avoid collisions.
