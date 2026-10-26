@@ -1,3 +1,5 @@
+package lecture44.demo;
+
 public class Demo {
     public static void main(String[] args) {
         // Inner try handle its own exception

@@ -1,3 +1,5 @@
+package lecture17.demo3;
+
 public class Demo3 {
     public static void main(String[] args) {
         A a = new B();

@@ -1,3 +1,5 @@
+package lecture49.demo2;
+
 public class Demo2 {
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Main thread starts");

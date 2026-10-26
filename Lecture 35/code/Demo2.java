@@ -1,3 +1,5 @@
+package lecture35.demo2;
+
 import java.util.PriorityQueue;
 
 public class Demo2 {

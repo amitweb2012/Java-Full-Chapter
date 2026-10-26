@@ -1,3 +1,5 @@
+package lecture05.demo;
+
 public class Demo {
     public static void main(String[] args) {
         //1. Implicit conversion 

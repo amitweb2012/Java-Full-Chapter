@@ -1,3 +1,5 @@
+package lecture49.demo7;
+
 public class Demo7 {
     public static void main(String[] args) {
         Thread t1 = new Thread(() -> {

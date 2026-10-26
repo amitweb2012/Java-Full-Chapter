@@ -1,3 +1,5 @@
+package lecture15.demo3;
+
 // Use of String[] args
 
 public class Demo5 {

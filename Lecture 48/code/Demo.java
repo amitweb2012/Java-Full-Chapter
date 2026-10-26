@@ -1,3 +1,5 @@
+package lecture48.demo;
+
 public class Demo {
     public static void main(String[] args) {
         MyThread t1 = new MyThread();

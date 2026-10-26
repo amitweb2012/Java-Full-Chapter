@@ -1,3 +1,5 @@
+package lecture23.demo4;
+
 public class Demo4 {
     public static void main(String[] args) {
         Direction d = Direction.NORTH;

@@ -1,3 +1,5 @@
+package lecture15.demo;
+
 // Static keyword
 
 public class Demo3 {

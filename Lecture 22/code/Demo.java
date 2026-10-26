@@ -1,3 +1,5 @@
+package lecture22.demo;
+
 import java.util.Objects;
 
 public class Demo {

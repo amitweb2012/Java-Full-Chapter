@@ -1,3 +1,5 @@
+package lecture30.demo2;
+
 import java.util.Iterator;
 
 public class Demo2 {

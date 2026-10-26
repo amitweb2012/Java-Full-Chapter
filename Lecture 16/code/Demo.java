@@ -1,3 +1,5 @@
+package lecture16.demo;
+
 // Encapsulation
 
 public class Demo {

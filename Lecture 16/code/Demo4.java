@@ -1,3 +1,5 @@
+package lecture16.demo4;
+
 //Types of inheritance
 // Simple inheritance
 // multi-level inheritance 

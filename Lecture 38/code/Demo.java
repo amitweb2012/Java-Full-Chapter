@@ -1,3 +1,5 @@
+package lecture38.demo;
+
 public class Demo {
     public static void main(String[] args) {
         Calculator c = (a,b) -> a + b;
