@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Java 21
         uses: actions/setup-java@v5
@@ -34,46 +36,53 @@ jobs:
       - name: Verify Maven project metadata
         run: mvn -B -f pom.xml verify
 
-      # This repository contains independent tutorial snippets. Some legacy files have
-      # public-class/file-name mismatches or duplicate classes, so compile valid files
-      # without making unrelated historical examples block every feature branch.
-      - name: Compile compatible Java examples independently
+      # This repository is a collection of standalone lesson snippets, not one
+      # Maven source tree. Some legacy examples have pre-existing compile errors,
+      # so validate only Java files changed by this feature branch.
+      - name: Compile changed Java examples
         shell: bash
         run: |
-          set -uo pipefail
-          compiled=0
-          skipped=0
-          output_root="$RUNNER_TEMP/java-chapter-classes"
+          set -euo pipefail
+
+          git fetch origin main
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            base_sha="${{ github.event.pull_request.base.sha }}"
+          else
+            base_sha="$(git merge-base origin/main "$GITHUB_SHA")"
+          fi
+
+          mapfile -d '' java_files < <(
+            git diff --name-only --diff-filter=ACMRT -z "$base_sha" "$GITHUB_SHA" -- '*.java'
+          )
+
+          if (( ${#java_files[@]} == 0 )); then
+            echo "No Java source files changed; Java compilation check is not needed."
+            exit 0
+          fi
+
+          output_root="$RUNNER_TEMP/changed-java-classes"
           mkdir -p "$output_root"
 
-          while IFS= read -r -d '' source; do
-            compiled=$((compiled + 1))
-            output_dir="$output_root/example-$compiled"
+          for index in "${!java_files[@]}"; do
+            source="${java_files[$index]}"
+            [[ -f "$source" ]] || continue
+            output_dir="$output_root/example-$index"
             mkdir -p "$output_dir"
-            log_file="$output_root/compile-$compiled.log"
 
-            echo "::group::Compile $source"
-            if javac --release 21 -d "$output_dir" "$source" >"$log_file" 2>&1; then
-              echo "Compiled successfully: $source"
-            else
-              skipped=$((skipped + 1))
-              echo "::warning file=$source::This standalone tutorial file does not compile independently; see workflow log."
-              cat "$log_file"
-            fi
+            echo "::group::Compile changed file: $source"
+            # Compile from the file's directory so same-directory dependencies
+            # can be discovered without combining unrelated lesson snippets.
+            source_dir="$(dirname "$source")"
+            source_name="$(basename "$source")"
+            (
+              cd "$source_dir"
+              javac --release 21 -d "$output_dir" "$source_name"
+            )
             echo "::endgroup::"
-          done < <(find . -type f -name '*.java' -not -path '*/.git/*' -not -path '*/target/*' -print0)
+          done
 
-          if ((compiled == 0)); then
-            echo "No Java source files were found." >&2
-            exit 1
-          fi
-
-          passed=$((compiled - skipped))
-          echo "Compiled $passed of $compiled Java source files; $skipped legacy/example files could not compile standalone."
-          if ((passed == 0)); then
-            echo "No Java examples compiled successfully." >&2
-            exit 1
-          fi
+          echo "Changed Java source compilation completed successfully."
 
       - name: Check patch whitespace
         shell: bash
