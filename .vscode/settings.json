@@ -62,5 +62,6 @@
   "search.exclude": {
     "**/out": true,
     "**/target": true
-  }
+  },
+  "java.debug.settings.onBuildFailureProceed": true
 }
