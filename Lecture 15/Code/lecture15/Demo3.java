@@ -11,6 +11,6 @@ public class Demo3 {
         }
 
         //java Demo3 input.txt output.txt
-        //java Demo3 
+        //java Demo3
     }
 }
