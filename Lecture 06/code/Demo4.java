@@ -13,14 +13,14 @@ public class Demo4 {
 
 
 
-        // Bitwise operators.
-        int a = 2; // 00000000 00000000 00000000 00000010
-        int b = 3; // 11
-                  
-        int c = a & b; // 10 --> 2
-        int d = a | b; // 11 --> 3
-        int e = a ^ b; // 01 --> 1
-        int f = ~a; //  11111111 11111111 11111111 11111101 == -3
+        // Bitwise operators. Use separate variable names to avoid redeclaration.
+        int bitA = 2; // 00000000 00000000 00000000 00000010
+        int bitB = 3; // 11
+
+        int bitAnd = bitA & bitB; // 10 --> 2
+        int bitOr = bitA | bitB; // 11 --> 3
+        int bitXor = bitA ^ bitB; // 01 --> 1
+        int bitNot = ~bitA; //  11111111 11111111 11111111 11111101 == -3
 
         //System.out.println(c + " , " + d + " , " + e + " , " + f);
 
