@@ -1,20 +1,24 @@
-# Run Java-Full-Chapter in VS Code
+# Run Java-Full-Chapter as one VS Code workspace
 
-This repository contains independent lecture examples, not one Java application. Some lectures may reuse class and package names. Keep the lecture hierarchy and compile/run the example you are studying.
+The repository is configured as one VS Code workspace containing independent Java lecture examples. Open the repository root once, then use the Java **Run** / **Debug** CodeLens above any class that has a `main` method.
 
 ## Requirements
+
 - JDK 21
 - Visual Studio Code
-- The extensions recommended in `.vscode/extensions.json`
+- The recommended extensions in `.vscode/extensions.json`
 
-Verify Java in the integrated terminal:
+Verify the JDK from the VS Code terminal:
 
 ```bash
 java -version
 javac -version
+mvn -version
 ```
 
-## Open the repository as one folder
+All three should use JDK 21.
+
+## Open the project
 
 ```bash
 git clone https://github.com/amitweb2012/Java-Full-Chapter.git
@@ -22,11 +26,29 @@ cd Java-Full-Chapter
 code .
 ```
 
-Or choose **File → Open Folder…** and select the repository root `Java-Full-Chapter`. Do not open only a Java file or a nested lecture folder as the workspace.
+Use **File → Open Folder…** and select the top-level `Java-Full-Chapter` folder. Do not open a single `.java` file or a nested lecture folder as the workspace.
 
-## Run one lecture example
+## Run any example
 
-From the repository root, for example:
+1. Wait for the Java language server to finish loading.
+2. Open any lecture `.java` file that has `public static void main(String[] args)`.
+3. Click **Run** or **Debug** above the `main` method.
+
+The workspace settings list each existing lecture `code` directory as a Java source root. Maven import is disabled for this workspace because the root `pom.xml` is metadata-only (`packaging=pom`), not a conventional application source tree. This lets the Java extension treat the lecture source directories as one unmanaged Java project.
+
+Examples are still independent. Run one main class at a time; don't assume all examples are one application or that every file has a `main` method. If different lectures have classes with the same package and class name, those would conflict in a shared project; the current lecture packages are intended to keep examples separated.
+
+## If Run / Debug is missing
+
+1. Install/enable the recommended Java extensions.
+2. Press `Cmd+Shift+P` and run **Java: Configure Java Runtime**; select JDK 21.
+3. Run **Java: Clean Java Language Server Workspace**, confirm, and let VS Code restart.
+4. Run **Developer: Reload Window**.
+5. Open **View → Output → Language Support for Java** and check for import errors.
+
+## Terminal fallback
+
+From the repository root, compile and run a packaged class individually:
 
 ```bash
 mkdir -p out
@@ -34,26 +56,8 @@ javac -d out "Lecture 19/code/lecture19/Demo2.java"
 java -cp out lecture19.Demo2
 ```
 
-Use the path and class name for the example you want. The fully qualified run name is based on the source file's `package` declaration. For a file without a package declaration, run the class name without a package prefix. You can also use the **Run** link above `main` when VS Code recognizes the file.
+Change the source path and fully qualified class name for the example you are studying.
 
-## Why this isn't one conventional Maven source tree
+## Maven note
 
-The root `pom.xml` uses `packaging=pom`, describing parent/metadata rather than a single app source tree. It does not automatically include each lecture folder as a Maven source folder. Combining all lecture sources can also cause duplicate-class errors if examples reuse names.
-
-Keep the lecture folders and compile one example at a time. Separate Maven modules can be added later if a formal build per lecture is desired.
-
-## Troubleshooting
-
-1. Open the Command Palette with `Cmd+Shift+P`.
-2. Run **Java: Configure Java Runtime** and select JDK 21.
-3. Run **Developer: Reload Window**.
-4. Inspect **View → Output → Language Support for Java** for workspace import errors.
-5. Try the terminal compile command above. If it succeeds, Java itself works and the remaining issue is likely VS Code workspace configuration.
-
-## Root Maven check
-
-```bash
-mvn -B verify
-```
-
-This validates root Maven metadata; it does not compile every independent lecture example by itself.
+`mvn -B verify` checks the root POM metadata only. It does not compile every lecture example; use the Java Run action or the terminal fallback above to run a lesson.
