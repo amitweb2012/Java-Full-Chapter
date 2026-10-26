@@ -1,55 +1,18 @@
-        //int i = 1; // 1 to 10
-
-        // System.out.println(i);
-        // i++;
-        // System.out.println(i);
-        // i++;
-        // System.out.println(i);
-        // i++;
-
-        // Loops --> while --> infinite
-
-        /*
-            while(expression) {
-                // do something
-
-            }
-        */
-
-        // while(i < 10) { // boolean --> true / false
-        //     System.out.println(i); 
-        //     i++;
-        // }
-
-
-        // do {
-        //     // do something
-        // } while(expression);
-
-        // do {
-        //     System.out.println(i);
-        //     i++;
-        // } while(i <= 10);
-
-        // Menu item selection --> do-while
-        /*
-            1. Play Game
-            2. Return saved Game
-            3. Exit
-        */
-        // 1 to 10
-        
-        for(int i = 10; i >= 1; i--) { // boolean --> true / false
+public class Demo2 {
+    public static void main(String[] args) {
+        // Loop examples from this lesson are kept in a valid runnable class.
+        for (int i = 10; i >= 1; i--) {
             System.out.println(i);
         }
-        
+
         /*
-         FLow of control of for
-         1. First assignment statement is executed (Variable definition).
-         2. Then second conditional statement is evaluated. (True / false)
-         3. If true, control flow will evaluate the body of the loop.
-         4. Once loop body is finished, control flow will go back to the for statement, and ithird increment
-         statement will be evaluated.
-         5. Again, conditional statement is evaluated.
-         6. Repeat 2 - 5.
+         Flow of control of for:
+         1. Initialization runs once.
+         2. The condition is evaluated.
+         3. If true, the loop body executes.
+         4. The update expression runs.
+         5. The condition is evaluated again.
+         6. Steps 3–5 repeat until the condition is false.
         */
+    }
+}
