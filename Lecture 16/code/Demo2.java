@@ -1,17 +1,13 @@
-// import college.Student;
-// import school.Student;
-
-// import college.*;
-// import school.*;
-
-//import packageName.className
-
+// Demonstrates fully-qualified names for classes in different packages.
 public class Demo2 {
     public static void main(String[] args) {
-        college.Student s1 = new college.Student();
-        s1.print();
-
-        school.Student s2 = new school.Student();
-        s2.print();
+        System.out.println("Import/package example:");
+        System.out.println("Use college.Student and school.Student from their own package source files.");
+        // The actual package-qualified usage is shown here, and can be enabled when
+        // compiled with the sibling package sources:
+        // college.Student collegeStudent = new college.Student();
+        // collegeStudent.print();
+        // school.Student schoolStudent = new school.Student();
+        // schoolStudent.print();
     }
 }
