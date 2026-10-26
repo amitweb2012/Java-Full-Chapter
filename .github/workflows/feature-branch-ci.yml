@@ -23,8 +23,6 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Java 21
         uses: actions/setup-java@v5
@@ -36,53 +34,46 @@ jobs:
       - name: Verify Maven project metadata
         run: mvn -B -f pom.xml verify
 
-      # This repository is a collection of standalone lesson snippets, not one
-      # Maven source tree. Some legacy examples have pre-existing compile errors,
-      # so validate only Java files changed by this feature branch.
-      - name: Compile changed Java examples
+      - name: Compile each chapter's Java examples
         shell: bash
         run: |
           set -euo pipefail
-
-          git fetch origin main
-
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            base_sha="${{ github.event.pull_request.base.sha }}"
-          else
-            base_sha="$(git merge-base origin/main "$GITHUB_SHA")"
-          fi
-
-          mapfile -d '' java_files < <(
-            git diff --name-only --diff-filter=ACMRT -z "$base_sha" "$GITHUB_SHA" -- '*.java'
-          )
-
-          if (( ${#java_files[@]} == 0 )); then
-            echo "No Java source files changed; Java compilation check is not needed."
-            exit 0
-          fi
-
-          output_root="$RUNNER_TEMP/changed-java-classes"
+          total=0
+          failed=0
+          output_root="$RUNNER_TEMP/chapter-java-classes"
           mkdir -p "$output_root"
 
-          for index in "${!java_files[@]}"; do
-            source="${java_files[$index]}"
-            [[ -f "$source" ]] || continue
-            output_dir="$output_root/example-$index"
-            mkdir -p "$output_dir"
+          while IFS= read -r -d '' source; do
+            total=$((total + 1))
+            relative="${source#./}"
+            safe_name="$(printf '%s' "$relative" | tr '/ ' '__')"
+            work_dir="$output_root/$total"
+            mkdir -p "$work_dir"
 
-            echo "::group::Compile changed file: $source"
-            # Compile from the file's directory so same-directory dependencies
-            # can be discovered without combining unrelated lesson snippets.
-            source_dir="$(dirname "$source")"
-            source_name="$(basename "$source")"
-            (
-              cd "$source_dir"
-              javac --release 21 -d "$output_dir" "$source_name"
-            )
+            # Examples are independent snippets and can reuse class names
+            # across files. Compile each source in isolation to avoid collisions.
+            public_type="$(sed -nE 's/^[[:space:]]*public[[:space:]]+(abstract[[:space:]]+|final[[:space:]]+)?(class|interface|enum|record)[[:space:]]+([A-Za-z_$][A-Za-z0-9_$]*).*/\3/p' "$source" | head -n 1)"
+            if [[ -n "$public_type" ]]; then
+              compile_source="$work_dir/$public_type.java"
+            else
+              compile_source="$work_dir/$(basename "$source")"
+            fi
+            cp "$source" "$compile_source"
+
+            echo "::group::Compile $relative"
+            if javac --release 21 -d "$work_dir/classes" "$compile_source"; then
+              echo "PASS: $relative"
+            else
+              echo "FAIL: $relative" >&2
+              failed=$((failed + 1))
+            fi
             echo "::endgroup::"
-          done
+          done < <(find . -type f -name '*.java' -not -path '*/.git/*' -not -path '*/target/*' -print0)
 
-          echo "Changed Java source compilation completed successfully."
+          echo "Checked $total Java examples; $failed failed."
+          if ((total == 0 || failed > 0)); then
+            exit 1
+          fi
 
       - name: Check patch whitespace
         shell: bash
