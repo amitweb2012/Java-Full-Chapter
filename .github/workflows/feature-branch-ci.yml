@@ -42,6 +42,8 @@ jobs:
           failed=0
           output_root="$RUNNER_TEMP/chapter-java-classes"
           mkdir -p "$output_root"
+          failure_summary="$output_root/failures.txt"
+          : > "$failure_summary"
 
           while IFS= read -r -d '' source; do
             total=$((total + 1))
@@ -61,16 +63,39 @@ jobs:
             cp "$source" "$compile_source"
 
             echo "::group::Compile $relative"
-            if javac --release 21 -d "$work_dir/classes" "$compile_source"; then
+            if compiler_output="$(javac --release 21 -d "$work_dir/classes" "$compile_source" 2>&1)"; then
               echo "PASS: $relative"
             else
               echo "FAIL: $relative" >&2
               failed=$((failed + 1))
+              {
+                echo
+                echo "FILE: $relative"
+                echo "$compiler_output" | sed "s#${compile_source}:#${relative}:#g"
+              } >> "$failure_summary"
+
+              # Emit annotations with the original repository path and source line.
+              while IFS= read -r diagnostic; do
+                translated="$(printf '%s' "$diagnostic" | sed "s#${compile_source}:#${relative}:#g")"
+                echo "$translated" >&2
+                if [[ "$translated" =~ ^(.+):([0-9]+):[[:space:]]error:[[:space:]](.*)$ ]]; then
+                  error_file="${BASH_REMATCH[1]}"
+                  error_line="${BASH_REMATCH[2]}"
+                  error_message="${BASH_REMATCH[3]}"
+                  echo "::error file=$error_file,line=$error_line,title=Java compilation error::$error_message"
+                fi
+              done <<< "$compiler_output"
             fi
             echo "::endgroup::"
           done < <(find . -type f -name '*.java' -not -path '*/.git/*' -not -path '*/target/*' -print0)
 
           echo "Checked $total Java examples; $failed failed."
+          if ((failed > 0)); then
+            echo
+            echo "========== JAVA COMPILATION FAILURE SUMMARY =========="
+            cat "$failure_summary"
+            echo "======================================================"
+          fi
           if ((total == 0 || failed > 0)); then
             exit 1
           fi
