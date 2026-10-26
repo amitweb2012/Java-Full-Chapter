@@ -1,0 +1,18 @@
+{
+  // Keep the whole repository as one VS Code workspace while allowing
+  // independent lecture examples to coexist.
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "java.autobuild.enabled": false,
+  "java.errors.incompleteClasspath.severity": "warning",
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/target": true,
+    "**/out": true
+  },
+  "search.exclude": {
+    "**/target": true,
+    "**/out": true
+  },
+  "java.project.sourcePaths": [],
+  "java.project.outputPath": "out"
+}
