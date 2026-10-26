@@ -7,39 +7,35 @@ public class Demo {
     }
 }
 
-// abstract class Car {
-//     void start() {
-//         System.out.println("Car started");
-//     }
+abstract class Car {
+    void start() {
+        System.out.println("Car started");
+    }
 
-//     abstract void accelerate();
+    abstract void accelerate();
+    abstract void brake();
+}
 
-//     abstract void brake();
-// }
+class FuelCar extends Car {
+    @Override
+    void accelerate() {
+        System.out.println("Fuel car is accelerating");
+    }
 
-// class FuelCar extends Car {
+    @Override
+    void brake() {
+        System.out.println("Fuel car is stopping");
+    }
+}
 
-//     @Override
-//     void accelerate() {
-//         System.out.println("Fuel car is accelerating");
-//     }
+class ElectricCar extends Car {
+    @Override
+    void accelerate() {
+        System.out.println("Electric car is accelerating");
+    }
 
-//     @Override
-//     void brake() {
-//         System.out.println("Fuel car is stopping");
-//     }
-
-// }
-
-// class ElectricCar extends Car {
-//     @Override
-//     void accelerate() {
-//         System.out.println("Electric car is accelerating");
-//     }
-
-//     @Override
-//     void brake() {
-//         System.out.println("Electric car is stopping");
-//     }
-
-// }
+    @Override
+    void brake() {
+        System.out.println("Electric car is stopping");
+    }
+}
