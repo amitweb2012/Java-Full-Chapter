@@ -1,17 +1,11 @@
-// import college.Student;
-// import school.Student;
-
-// import college.*;
-// import school.*;
-
-//import packageName.className
-
+// Demonstrates using fully-qualified class names to distinguish packages.
+// Compile together with the sibling college/Student.java and school/Student.java files.
 public class Demo2 {
     public static void main(String[] args) {
-        college.Student s1 = new college.Student();
-        s1.print();
+        college.Student collegeStudent = new college.Student();
+        collegeStudent.print();
 
-        school.Student s2 = new school.Student();
-        s2.print();
+        school.Student schoolStudent = new school.Student();
+        schoolStudent.print();
     }
 }
