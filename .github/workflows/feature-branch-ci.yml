@@ -25,38 +25,51 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java 21
-        if: ${{ hashFiles('**/pom.xml') != '' || hashFiles('**/gradlew') != '' }}
         uses: actions/setup-java@v4
         with:
-          distribution: murine
+          distribution: temurin
           java-version: '21'
           cache: maven
 
-      - name: Run Maven verification
-        if: ${{ hashFiles('**/pom.xml') != '' }}
-        run: |
-          set -e
-          find . -name pom.xml -not -path '*/target/*' -print0 |
-          while IFS= read -r -d '' pom; do
-            echo "Verifying ${pom}"
-            mvn -B -f "${pom}" verify
-          done
+      - name: Verify Maven project metadata
+        run: mvn -B -f pom.xml verify
 
-      - name: Run Gradle verification
-        if: ${{ hashFiles('**/gradlew') != '' }}
+      - name: Compile each chapter's Java examples
+        shell: bash
         run: |
-          set -e
-          find . -name gradlew -not -path '*/build/*' -print0 |
-          while IFS= read -r -d '' wrapper; do
-            dir="$(dirname "${wrapper}")"
-            echo "Verifying Gradle project in ${dir}"
-            chmod +x "${wrapper}"
-            "${wrapper}" -p "${dir}" build
-          done
+          set -euo pipefail
+          compiled=0
+          output_root="$RUNNER_TEMP/java-chapter-classes"
+          mkdir -p "$output_root"
+
+          while IFS= read -r -d '' code_dir; do
+            mapfile -d '' sources < <(find "$code_dir" -maxdepth 1 -type f -name '*.java' -print0)
+            if (("${#sources[@]}" == 0)); then
+              continue
+            fi
+
+            compiled=$((compiled + 1))
+            output_dir="$output_root/chapter-$compiled"
+            mkdir -p "$output_dir"
+            echo "::group::Compile Java examples in $code_dir"
+            javac --release 21 -d "$output_dir" "${sources[@]}"
+            echo "::endgroup::"
+          done < <(find . -type d -name code -not -path '*/.git/*' -print0)
+
+          if ((compiled == 0)); then
+            echo "No Java source files were found in chapter code directories." >&2
+            exit 1
+          fi
+
+          echo "Successfully compiled Java sources in $compiled chapter code directories."
 
       - name: Check patch whitespace
-        run: git diff --check "${{ github.event.pull_request.base.sha || github.event.before }}" "${{ github.sha }}" || git diff --check
-
-      - name: Report when no Java build is configured
-        if: ${{ hashFiles('**/pom.xml') == '' && hashFiles('**/gradlew') == '' }}
-        run: echo "No Maven pom.xml or Gradle wrapper found. Java build tests were skipped; add a build file to enable them."
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git diff --check "${{ github.event.pull_request.base.sha }}" "${{ github.sha }}"
+          elif [[ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]]; then
+            git diff --check "${{ github.event.before }}" "${{ github.sha }}"
+          else
+            git diff --check
+          fi
