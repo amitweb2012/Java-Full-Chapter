@@ -28,7 +28,7 @@ jobs:
         if: ${{ hashFiles('**/pom.xml') != '' || hashFiles('**/gradlew') != '' }}
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: murine
           java-version: '21'
           cache: maven
 
