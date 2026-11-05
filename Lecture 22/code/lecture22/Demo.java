@@ -15,7 +15,7 @@ public class Demo {
         s2.name = "Aditya";
         s2.age = 28;
 
-        // System.out.println(s1.equals(s2));
+        System.out.println(s1.equals(s2));
 
         // System.out.println(s1.hashCode() == s2.hashCode());
 
@@ -53,6 +53,8 @@ class Student extends Object implements Cloneable {
 
         // Check if both classes are of type Student
         // If not checked --> ClassCastExceptions
+        System.out.println(obj.getClass());
+        System.out.println("obj.getClass().getName() : " + obj.getClass().getName());
         if(obj.getClass() != this.getClass()) {
             return false;
         }

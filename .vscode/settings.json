@@ -1,5 +1,4 @@
 {
-  "java.import.maven.enabled": false,
   "java.project.sourcePaths": [
     "Lecture 03/code",
     "Lecture 05/code",

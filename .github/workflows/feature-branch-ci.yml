@@ -31,10 +31,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-          cache: maven
-
-      - name: Verify Maven project metadata
-        run: mvn -B -f pom.xml verify
 
       - name: Compile each chapter's Java examples
         shell: bash

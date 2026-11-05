@@ -13,10 +13,9 @@ Verify the JDK from the VS Code terminal:
 ```bash
 java -version
 javac -version
-mvn -version
 ```
 
-All three should use JDK 21.
+Both commands should use JDK 21.
 
 ## Open the project
 
@@ -34,7 +33,7 @@ Use **File → Open Folder…** and select the top-level `Java-Full-Chapter` fol
 2. Open any lecture `.java` file that has `public static void main(String[] args)`.
 3. Click **Run** or **Debug** above the `main` method.
 
-The workspace settings list each existing lecture `code` directory as a Java source root. Maven import is disabled for this workspace because the root `pom.xml` is metadata-only (`packaging=pom`), not a conventional application source tree. This lets the Java extension treat the lecture source directories as one unmanaged Java project.
+The workspace settings list each existing lecture `code` directory as a Java source root. This lets the Java extension treat the lecture source directories as one unmanaged Java project.
 
 Examples are still independent. Run one main class at a time; don't assume all examples are one application or that every file has a `main` method. If different lectures have classes with the same package and class name, those would conflict in a shared project; the current lecture packages are intended to keep examples separated.
 
@@ -57,7 +56,3 @@ java -cp out lecture19.Demo2
 ```
 
 Change the source path and fully qualified class name for the example you are studying.
-
-## Maven note
-
-`mvn -B verify` checks the root POM metadata only. It does not compile every lecture example; use the Java Run action or the terminal fallback above to run a lesson.

@@ -21,7 +21,7 @@ public class Demo4 {
             }
 
             void greet() {
-                  System.out.println("Hello");
+                System.out.println("Hello");
             }
         };
 

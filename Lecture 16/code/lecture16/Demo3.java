@@ -10,23 +10,27 @@ public class Demo3 {
         s1.markAttendance();
        // s1.attendLab(); (wrong)
     }
-}
 
-/*
-parent (Superclass) --> child (subclass)
-*/
+    /*
+    parent (Superclass) --> child (subclass)
+    */
+    static class Student {
+        String name;
+        int age;
 
-class Student {
-    String name;
-    int age;
-
-    public void markAttendance() {
-        System.out.println("Attendance marked");
+        public void markAttendance() {
+            System.out.println("Attendance marked");
+        }
     }
-}
 
-class EngineeringStudent extends Student {
-    void attendLab() {
-        System.out.println("lab attended");
+    static class EngineeringStudent extends Student {
+        void attendLab() {
+            System.out.println("lab attended");
+        }
+
+        @Override
+        public void markAttendance() {
+            System.out.println("Attendance marked by engineering student");
+        }
     }
 }
